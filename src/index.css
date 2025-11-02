@@ -14,3 +14,19 @@ body{
 .blue{
   color: white;
 }
+.quoteBox{
+
+ width: 300px;
+}
+.textPage{
+  display: flex;
+  flex-direction: column;
+  gap: 50px;
+  justify-content: center;
+  align-items: center;
+}
+.quotes{
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 60px;
+}

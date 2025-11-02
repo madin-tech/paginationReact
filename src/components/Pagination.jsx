@@ -1,65 +1,67 @@
-import React, { useEffect, useState } from "react";
-import Pagination from "@mui/material/Pagination";
-import Stack from "@mui/material/Stack";
-
-const limit = 20;
+// import Pagination from "@mui/material/Pagination";
+// import Stack from "@mui/material/Stack";
+import { useEffect, useState } from "react";
 
 const PaginationComponent = () => {
-  const [loading, setLoading] = useState(false);
-  const [page, setPage] = useState(1);
-
-  const [data, setData] = useState({
-    quotes: [],
-    limit: 0, //bitta gurpada nechta item bolishi
-    skip: 0, // nechtasini boshidan ob tashash
-    total: 0, // nechta item bor
-  });
-
+  const [datas, setdatas] = useState([]);
+  const [isLoading, setLoading] = useState(false);
+  const [page, setPage] = useState(0);
   useEffect(() => {
-    getData();
+    getdata();
   }, [page]);
-  const getData = () => {
+  let limit = 10;
+  function getdata() {
     setLoading(true);
-    fetch(
-      `https://dummyjson.com/quotes?limit=${limit}&skip=${limit * (page - 1)}`
-    )
+    fetch(`https://dummyjson.com/quotes?skip=${page * limit}&limit=${limit}`)
       .then((res) => res.json())
-      .then((res) => {
-        console.log(res);
-        setData(res);
-      })
-      .finally(() => {
-        setLoading(false);
+      .then((data) => {
+        // console.log("api info: ", data);
+        setdatas([data&& data]);
+    })
+      .catch((err) => err)
+      .finally(()=>{
+         setLoading(false);
       });
-  };
-  const handleChange = (event, value) => {
-    console.log("Page changed to:", value);
-    setPage(value); 
-  };
-  if (loading) {
-    return (
-      <div>
-        <h1>Loading...</h1>
-      </div>
-    );
   }
+  console.log(datas);
+  
+    
+function handleInc() {
+  setPage(page + 1);
+}
+function handleDec() {
+  setPage(page - 1);
+}
+
+
+  // console.log("setdata info: ", datas);
   return (
-    <div>
-      {data?.quotes &&
-        data.quotes.map((quote) => (
-          <div key={quote.id}>
-            <h1>{quote.id}</h1>
-          </div>
-        ))}
-      <Stack spacing={2} className="container pagination">
+    <div className="textPage">
+      {isLoading && "Loading(^-^*)"}
+      <div className="quotes">
+        {datas?.map((info) =>
+          info.quotes.map((quote) => (
+            <div key={quote.id} className="quoteBox">
+              <h1>"{quote.quote}"</h1>
+            </div>
+          ))
+        )}
+      </div>
+      {/* <Stack spacing={2} className="container pagination">
         <Pagination
           page={page}
           onChange={handleChange}
-          count={Math.ceil(data.total / data.limit)}
+          count={10}
           color="primary"
           className="blue"
         />
-      </Stack>
+      </Stack> */}
+
+      <div>
+        <button onClick={handleDec}>prev</button>
+        <button onClick={handleInc}>next</button>
+        
+      </div>
     </div>
   );
 };
