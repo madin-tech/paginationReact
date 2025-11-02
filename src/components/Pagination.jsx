@@ -45,7 +45,9 @@ function handleDec() {
               <h1>"{quote.quote}"</h1>
             </div>
           ))
-        )}
+        )
+        
+        }
       </div>
       {/* <Stack spacing={2} className="container pagination">
         <Pagination
@@ -57,10 +59,9 @@ function handleDec() {
         />
       </Stack> */}
 
-      <div>
+      <div style={{display:`flex`, gap:`30px`}}>
         <button onClick={handleDec}>prev</button>
         <button onClick={handleInc}>next</button>
-        
       </div>
     </div>
   );
